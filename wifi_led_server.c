@@ -20,21 +20,17 @@
 
 static const char *TAG = "wifi_led_server";
 
-static const char *html_page =
-    "<html><head><title>ESP32 RoboticArm</title></head>"
-    "<body><h1>ESP32 LED Control</h1>"
-    "<form action=\"/led\" method=\"get\">"
-    "<button name=\"state\" value=\"on\" type=\"submit\">LED ON</button>"
-    "<button name=\"state\" value=\"off\" type=\"submit\">LED OFF</button>"
-    "</form></body></html>";
+extern const uint8_t spage_html_start[] asm("_binary_spage_html_start");
+extern const uint8_t spage_html_end[]   asm("_binary_spage_html_end");
 
-static esp_err_t root_get_handler(httpd_req_t *req)
+static esp_err_t root_get_handler(httpd_req_t *req) // send html page to browser
 {
-    httpd_resp_send(req, html_page, HTTPD_RESP_USE_STRLEN);
+    size_t html_len = spage_html_end - spage_html_start;
+    httpd_resp_send(req, (const char *)spage_html_start, html_len);
     return ESP_OK;
 }
 
-static esp_err_t led_get_handler(httpd_req_t *req)
+static esp_err_t led_get_handler(httpd_req_t *req) // led handler
 {
     char param[32];
     if (httpd_req_get_url_query_str(req, param, sizeof(param)) == ESP_OK) {
@@ -117,4 +113,5 @@ void wifi_led_server_start(void)
 
     wifi_init_softap();
     start_webserver();
+    ESP_LOGI(TAG, "HTML vloženo: %d bajtů", spage_html_end - spage_html_start);
 }
