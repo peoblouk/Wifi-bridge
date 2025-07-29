@@ -2,17 +2,17 @@
 
 #include "wifi_led_server.h" //! změnit jmeno
 
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+//#include "freertos/FreeRTOS.h"
+//#include "freertos/task.h"
 #include "esp_wifi.h"
 #include "esp_event.h"
 #include "esp_log.h"
-#include "sdkconfig.h"
+//#include "sdkconfig.h"
 #include "esp_netif.h"
 #include "esp_http_server.h"
 #include "driver/ledc.h"
-#include "driver/gpio.h"
-#include "esp_heap_caps.h"
+//#include "driver/gpio.h"
+//#include "esp_heap_caps.h"
 #include <string.h>
 #include <stdlib.h>
 
