@@ -1,6 +1,7 @@
 // wifi_servo_server.c
 
 #include "wifi_led_server.h" //! změnit jmeno
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_wifi.h"
@@ -17,27 +18,27 @@
 
 #define WIFI_SSID      "ESP32-RoboticArm"
 #define WIFI_PASS      "RoboticArm123"
-#define MAX_STA_CONN   4
+#define MAX_STA_CONN   4                      // max stable connections
 
-#define SERVO_GPIO         GPIO_NUM_18        // výstupní pin pro servo
-#define SERVO_PWM_FREQ     50                 // 50 Hz pro servo
+#define SERVO_GPIO         GPIO_NUM_18        // output pin for servo
+#define SERVO_PWM_FREQ     50                 // 50 Hz for servo
 #define SERVO_PWM_RES      LEDC_TIMER_16_BIT  // 16bitové rozlišení
 #define SERVO_PWM_CHANNEL  LEDC_CHANNEL_0
 
 static const char *TAG = "wifi_servo_server";
 
-// HTML soubor vložený kompilátorem
+// HTML file for compilator
 extern const uint8_t spage_html_start[] asm("_binary_spage_html_start");
 extern const uint8_t spage_html_end[]   asm("_binary_spage_html_end");
 
-static esp_err_t root_get_handler(httpd_req_t *req)
+static esp_err_t root_get_handler(httpd_req_t *req) // Paste HTML file to website
 {
     size_t html_len = spage_html_end - spage_html_start;
     httpd_resp_send(req, (const char *)spage_html_start, html_len);
     return ESP_OK;
 }
 
-static esp_err_t servo_get_handler(httpd_req_t *req)
+static esp_err_t servo_get_handler(httpd_req_t *req) // Servo set angle from website
 {
     char query[32];
     if (httpd_req_get_url_query_str(req, query, sizeof(query)) == ESP_OK) {
