@@ -99,7 +99,7 @@ static void wifi_init_softap(void)
     ESP_ERROR_CHECK(esp_event_loop_create_default());
     esp_netif_create_default_wifi_ap();
 
-    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();  // AP set
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
 
     wifi_config_t wifi_config = {
@@ -146,5 +146,5 @@ void wifi_led_server_start(void)
 
     wifi_init_softap();
     start_webserver();
-    ESP_LOGI(TAG, "HTML vloženo: %d bajtů", spage_html_end - spage_html_start);
+    ESP_LOGI(TAG, "HTML size: %d b", spage_html_end - spage_html_start);
 }
